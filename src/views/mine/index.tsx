@@ -9,7 +9,6 @@ interface Iprops {
 }
 const Mine: FC<Iprops> = () => {
   const name = useAppSelector((state) => state.user.name, shallowEqual);
-  console.log(name);
   const dispath = useAppDispath();
   function handleClick() {
     dispath(ChangeAccountAction("hahhahahhah" + Math.random()));

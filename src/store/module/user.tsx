@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+const initialState = {
+  account: "lc123",
+  name: "liuchang",
+  direction: "left"
+};
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    account: "lc123",
-    name: "liuChang"
-  },
+  initialState,
   reducers: {
     ChangeAccountAction(state, { payload }) {
       state.name = payload;
