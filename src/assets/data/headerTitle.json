@@ -1,0 +1,37 @@
+[
+  {
+    "type": "link",
+    "path": "/discover",
+    "title": "发现音乐"
+  },
+  {
+    "type": "link",
+    "path": "/mine",
+    "title": "我的音乐"
+  },
+  {
+    "type": "link",
+    "path": "/friend",
+    "title": "关注"
+  },
+  {
+    "type": "href",
+    "path": "https://music.163.com/store/product",
+    "title": "商城"
+  },
+  {
+    "type": "href",
+    "path": "https://music.163.com/st/musician",
+    "title": "音乐人"
+  },
+  {
+    "type": "href",
+    "path": "https://music.163.com/st/ad-song",
+    "title": "云推歌"
+  },
+  {
+    "type": "link",
+    "path": "/download",
+    "title": "下载客户端"
+  }
+]

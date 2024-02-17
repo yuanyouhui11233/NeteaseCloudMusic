@@ -1,7 +1,11 @@
 import { memo } from "react";
 
 const Friend = memo(() => {
-  return <div>Friend</div>;
+  return (
+    <div>
+      <span>Friend</span>
+    </div>
+  );
 });
 
 export default Friend;

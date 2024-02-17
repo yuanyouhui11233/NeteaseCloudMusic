@@ -1,6 +1,6 @@
 import { Suspense, memo } from "react";
-import Header from "./views/header";
-import Footer from "./views/footer";
+import AppHeader from "./components/app-header";
+import Footer from "./components/app-footer";
 import { useRoutes } from "react-router-dom";
 import routes from "./router";
 
@@ -8,7 +8,7 @@ const App = memo(() => {
   return (
     <div className="app">
       <div className="header">
-        <Header />
+        <AppHeader />
       </div>
       <Suspense fallback="">
         <div className="content">{useRoutes(routes)}</div>
