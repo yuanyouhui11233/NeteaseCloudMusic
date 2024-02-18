@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const HeaderWrapper = styled.div`
   background: #242424;
-  height: 70px;
+  height: 75px;
   font-size: 14px;
   color: #fff;
   .h-content {

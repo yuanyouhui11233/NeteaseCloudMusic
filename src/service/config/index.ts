@@ -1,7 +1,6 @@
 let BASE_URL = "";
 if (process.env.NODE_ENV === "development") {
   BASE_URL = "http://codercba.com:9002";
-  console.log(process.env);
 } else {
   BASE_URL = "http://codercba.com:9002";
 }
