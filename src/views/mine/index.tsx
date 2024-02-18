@@ -3,7 +3,7 @@ import { ChangeAccountAction } from "@/store/module/user";
 import { memo } from "react";
 import type { FC, ReactNode } from "react";
 import { shallowEqual } from "react-redux";
-
+import { Button } from "antd";
 interface Iprops {
   children?: ReactNode;
 }
@@ -17,7 +17,9 @@ const Mine: FC<Iprops> = () => {
     <div>
       Mine
       <div>当前user： {name}</div>
-      <button onClick={(e) => handleClick()}>change</button>
+      <Button type="primary" onClick={(e) => handleClick()}>
+        change
+      </Button>
     </div>
   );
 };

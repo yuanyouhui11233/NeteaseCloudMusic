@@ -1,8 +1,10 @@
 import { memo } from "react";
 import type { ReactNode, FC } from "react";
-import { HeaderWrapper, HeaderLeft, HeaderRight } from "./style";
-import headerTitle from "@/assets/data/headerTitle.json";
 import { NavLink } from "react-router-dom";
+import { Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import headerTitle from "@/assets/data/headerTitle.json";
+import { HeaderWrapper, HeaderLeft, HeaderRight } from "./style";
 interface Iprops {
   children?: ReactNode;
 }
@@ -27,9 +29,6 @@ const AppHeader: FC<Iprops> = () => {
       );
     }
   }
-  function clickWhickOne(index: number) {
-    console.log(index);
-  }
   return (
     <HeaderWrapper>
       <div className="h-content wrap-v1">
@@ -40,11 +39,7 @@ const AppHeader: FC<Iprops> = () => {
           <div className="title-list">
             {headerTitle.map((item: any, index) => {
               return (
-                <div
-                  className="item"
-                  key={index}
-                  onClick={(e) => clickWhickOne(index)}
-                >
+                <div className="item" key={index}>
                   {handleHeaderTitle(item)}
                 </div>
               );
@@ -52,15 +47,31 @@ const AppHeader: FC<Iprops> = () => {
           </div>
         </HeaderLeft>
         <HeaderRight>
+          {/* <div className="right"> */}
           <div className="search">
-            <input type="text" placeholder="音乐/电台/视频/用户" />
+            <Input
+              prefix={<SearchOutlined />}
+              className="serach-input"
+              placeholder="音乐/电台/视频/用户"
+            />
           </div>
-          <div className="bilog">
+          <div
+            className="bilog"
+            onClick={(e) =>
+              window.open(
+                "https://music.163.com/#/login?targetUrl=%2Fcreatorcenter",
+                "_blank"
+              )
+            }
+          >
             <span>创作者中心</span>
           </div>
-          <div className="login-btn">
-            <button>登录</button>
+          <div className="login">
+            <a href="#" className="login-link">
+              登录
+            </a>
           </div>
+          {/* </div> */}
         </HeaderRight>
       </div>
       <div className="divider"></div>

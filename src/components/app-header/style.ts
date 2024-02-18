@@ -65,7 +65,24 @@ export const HeaderLeft = styled.div`
   }
 `;
 export const HeaderRight = styled.div`
+  flex: 1;
+  padding-left: 10px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  .search {
+    input {
+      &::placeholder {
+        font-size: 12px;
+      }
+    }
+  }
+  .serach-input {
+    border-radius: 20px;
+    width: 158px;
+    height: 32px;
+  }
   .bilog {
     width: 90px;
     height: 32px;
@@ -74,5 +91,14 @@ export const HeaderRight = styled.div`
     color: #ccc;
     border: 1px solid #4f4f4f;
     border-radius: 20px;
+    cursor: pointer;
+  }
+  .login {
+    .login-link {
+      color: #787878;
+    }
+    .login-link:hover {
+      color: #999;
+    }
   }
 `;
