@@ -27,17 +27,46 @@ export const CarouselContent = styled.div`
       p {
         color: rgb(141, 141, 141);
         text-align: center;
-        margin: 10px auto;
+        margin: 10px auto 0;
       }
       .btn {
         width: 215px;
         height: 56px;
         background-position: 0 -289px;
         text-indent: -9999px;
-        margin: 185px 0 0 20px;
+        margin: 185px 0 0 19px;
+        opacity: 0;
+      }
+      .btn:hover {
+        opacity: 1;
       }
     }
   }
 `;
-// export const CarouselRight = styled.div``;
-export const CarouselButton = styled.div``;
+export const CarouselButton = styled.div`
+  .btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 37px;
+    height: 63px;
+    cursor: pointer;
+    background-color: transparent;
+    background: url(${require("@/assets/img/banner_sprite.png")}) no-repeat 0 0;
+    text-indent: -9999px;
+  }
+  .left {
+    left: 208px;
+    background-position: 0 -360px;
+  }
+  .left:hover {
+    background-position: 0 -429px;
+  }
+  .right {
+    right: 208px;
+    background-position: 0 -508px;
+  }
+  .right:hover {
+    background-position: 0 -577px;
+  }
+`;
