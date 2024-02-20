@@ -23,11 +23,11 @@ const TopBanner: FC<Iprops> = () => {
   function switchNext() {
     carouselRef.current?.next();
   }
-  function handleAfterChange(current: number) {
-    console.log(current);
+
+  function handleBeforChange(current: number, next: number) {
+    // afterChange 会导致背景图落后于轮播图的切换，不同步。
     setBannerIndex(current);
-    setImgUrl(banner[current]?.imageUrl + "?imageView&blur=40x20");
-    console.log(imgUrl);
+    setImgUrl(banner[next]?.imageUrl + "?imageView&blur=40x20");
   }
 
   return (
@@ -42,7 +42,9 @@ const TopBanner: FC<Iprops> = () => {
           <div className="wrap">
             <div className="wrap-banner">
               <Carousel
-                afterChange={(current) => handleAfterChange(current)}
+                beforeChange={(current, next) =>
+                  handleBeforChange(current, next)
+                }
                 autoplay
                 ref={carouselRef}
                 effect="fade"
