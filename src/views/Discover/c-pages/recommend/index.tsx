@@ -2,7 +2,10 @@ import { memo, useEffect } from "react";
 import type { ReactNode, FC } from "react";
 
 import { useAppDispath } from "@/store";
-import { fetchRecommendBanners } from "@/store/module/recommend";
+import {
+  fetchRecommendBanners,
+  fetchRecommendList
+} from "@/store/module/recommend";
 
 import TopBanner from "./c-cpns/topBanner";
 import HotRecommend from "./c-cpns/hotRecommend";
@@ -15,6 +18,7 @@ const Recommend: FC<Iprops> = () => {
   const dispath = useAppDispath();
   useEffect(() => {
     dispath(fetchRecommendBanners());
+    dispath(fetchRecommendList(8));
   });
   return (
     <div className="recommend-page">

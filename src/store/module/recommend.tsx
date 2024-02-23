@@ -1,18 +1,30 @@
-import { getBanners } from "@/service/recommend";
+import { getBanners, getRecommendList } from "@/service/recommend";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 interface IRecommendState {
   banners: any[];
+  recommendList: any[];
 }
 export const fetchRecommendBanners = createAsyncThunk(
   "recommend/banner",
   async (arg, { dispatch }) => {
     const res = await getBanners();
     dispatch(changeBannersAction(res.banners));
-    console.log(res);
+    // console.log(res);
+  }
+);
+// 歌单推荐
+export const fetchRecommendList = createAsyncThunk(
+  "recommend/list",
+  async (limit: number, { dispatch }) => {
+    const res = await getRecommendList(limit);
+    // console.log(res);
+
+    dispatch(changeRmdListAction(res.result));
   }
 );
 const initialState: IRecommendState = {
-  banners: []
+  banners: [],
+  recommendList: []
 };
 const recommendSlice = createSlice({
   name: "recommend",
@@ -20,6 +32,9 @@ const recommendSlice = createSlice({
   reducers: {
     changeBannersAction(state, { payload }) {
       state.banners = payload;
+    },
+    changeRmdListAction(state, { payload }) {
+      state.recommendList = payload;
     }
   }
   // extraReducers: (builder) => {
@@ -30,5 +45,6 @@ const recommendSlice = createSlice({
   //   });
   // }
 });
-export const { changeBannersAction } = recommendSlice.actions;
+export const { changeBannersAction, changeRmdListAction } =
+  recommendSlice.actions;
 export default recommendSlice.reducer;

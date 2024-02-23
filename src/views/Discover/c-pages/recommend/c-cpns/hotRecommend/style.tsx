@@ -13,6 +13,11 @@ export const HotRecommendWrapper = styled.div`
     .left-content {
       padding: 20px 20px 40px;
     }
+    .left-songs {
+      margin: 20px 0 0 -42px;
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
   .right {
     width: 250px;
