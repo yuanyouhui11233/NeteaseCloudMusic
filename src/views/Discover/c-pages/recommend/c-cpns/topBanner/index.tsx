@@ -10,7 +10,6 @@ interface Iprops {
 }
 
 const TopBanner: FC<Iprops> = () => {
-  const [bannerIndex, setBannerIndex] = useState(0);
   const [imgUrl, setImgUrl] = useState("");
   const banner = useAppSelector((state) => {
     return state.recommend.banners;
@@ -26,7 +25,6 @@ const TopBanner: FC<Iprops> = () => {
 
   function handleBeforChange(current: number, next: number) {
     // afterChange 会导致背景图落后于轮播图的切换，不同步。
-    setBannerIndex(current);
     setImgUrl(banner[next]?.imageUrl + "?imageView&blur=40x20");
   }
 
