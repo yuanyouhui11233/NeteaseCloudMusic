@@ -15,6 +15,7 @@ export const RecommendWrapper = styled.div`
     .r-left {
       width: 729px;
       padding: 20px 20px 40px;
+      box-sizing: border-box;
     }
     .r-right {
       width: 250px;

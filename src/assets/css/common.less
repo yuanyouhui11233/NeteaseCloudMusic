@@ -7,6 +7,7 @@ button {
   color: #333;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f5f5f5;
+  box-sizing: border-box;
 }
 
 .wrap-v1 {
@@ -17,6 +18,12 @@ button {
 .wrap-v2 {
   width: 980px;
   margin: 0 auto;
+}
+.textNoWrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 
 .sprite_01 {

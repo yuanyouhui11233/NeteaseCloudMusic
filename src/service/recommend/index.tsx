@@ -8,6 +8,14 @@ export function getBanners() {
 // 推荐歌单
 export function getRecommendList(limit = 30) {
   return axRequest.get({
-    url: `personalized?limit=${limit}`
+    url: `/personalized?limit=${limit}`
+  });
+}
+
+// 新碟
+
+export function getNeWAlbumList() {
+  return axRequest.get({
+    url: "/album/newest"
   });
 }

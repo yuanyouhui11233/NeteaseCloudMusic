@@ -13,7 +13,6 @@ const HotRecommend: FC<Iprops> = () => {
   const recommendList = useAppSelector(
     (state) => state.recommend.recommendList
   );
-  console.log(recommendList);
 
   return (
     <HotRecommendWrapper>
