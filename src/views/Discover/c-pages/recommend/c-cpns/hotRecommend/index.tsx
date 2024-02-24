@@ -17,27 +17,27 @@ const HotRecommend: FC<Iprops> = () => {
 
   return (
     <HotRecommendWrapper>
-      <div className="left">
-        <div className="left-content">
+      <div className="main-area">
+        <div className="main-content">
           <AreaHeaderV1
             title="热门推荐"
             pathLink="/discover/songs"
             keyword={["华语", "流行", "摇滚", "民谣", "电子"]}
           />
-
-          <div className="left-songs">
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
-            <SingleSongItem />
+          <div className="main-songs">
+            {recommendList.map((item) => {
+              return (
+                <SingleSongItem
+                  key={item.id}
+                  title={item.name}
+                  picUrl={item.picUrl}
+                  playCount={item.playCount}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
-      <div className="right">right</div>
     </HotRecommendWrapper>
   );
 };

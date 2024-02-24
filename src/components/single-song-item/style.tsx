@@ -10,6 +10,10 @@ export const SingleSongWrapper = styled.div`
   .s-cover-1 {
     width: 140px;
     height: 140px;
+    .cover-img {
+      width: 140px;
+      height: 140px;
+    }
     .msk {
       position: absolute;
       top: 0;

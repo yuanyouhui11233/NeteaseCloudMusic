@@ -9,6 +9,7 @@ import {
 
 import TopBanner from "./c-cpns/topBanner";
 import HotRecommend from "./c-cpns/hotRecommend";
+import { RecommendWrapper } from "./style";
 
 interface Iprops {
   children?: ReactNode;
@@ -21,14 +22,18 @@ const Recommend: FC<Iprops> = () => {
     dispath(fetchRecommendList(8));
   });
   return (
-    <div className="recommend-page">
+    <RecommendWrapper className="recommend-page">
       <div className="r-carousel">
         <TopBanner />
       </div>
       <div className="r-content">
-        <HotRecommend />
+        <div className="r-left">
+          <HotRecommend />
+          <div>1</div>
+        </div>
+        <div className="r-right">right</div>
       </div>
-    </div>
+    </RecommendWrapper>
   );
 };
 
