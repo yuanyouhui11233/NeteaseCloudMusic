@@ -7,5 +7,5 @@ export function formatSongPlayCount(plauCount: number) {
 }
 // 定义img的尺寸
 export function formatImgSize(imgUrl: string, width: number, height: number) {
-  return imgUrl + `?param=${width}x${height}`;
+  return imgUrl + `?param=${width}y${height}`;
 }

@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 
 import { SingleSongWrapper } from "./style";
 import { formatImgSize, formatSongPlayCount } from "@/utils/format";
-
+/**
+ * 热门推荐页 单个歌单显示的组件
+ */
 interface Iprops {
   children?: ReactNode;
 

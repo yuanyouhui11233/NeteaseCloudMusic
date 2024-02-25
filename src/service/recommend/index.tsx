@@ -29,3 +29,13 @@ export function getPlaylistDetail(id: number) {
     }
   });
 }
+// 获取热门歌手列表
+export function getTopArtistsList(limit = 30, offset = 0) {
+  return axRequest.get({
+    url: "/top/artists",
+    params: {
+      offset,
+      limit
+    }
+  });
+}

@@ -124,6 +124,9 @@ export const RankingItemWrapper = styled.div`
     .more {
       line-height: 32px;
       color: #000;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 `;

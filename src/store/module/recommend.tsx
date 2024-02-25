@@ -2,7 +2,8 @@ import {
   getBanners,
   getNeWAlbumList,
   getPlaylistDetail,
-  getRecommendList
+  getRecommendList,
+  getTopArtistsList
 } from "@/service/recommend";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -49,17 +50,29 @@ export const fetchAllRankingDetail = createAsyncThunk(
     });
   }
 );
+// 热门歌手列表
+export const fetchTopArtists = createAsyncThunk(
+  "top/artists",
+  (_, { dispatch }) => {
+    getTopArtistsList(5).then((res: any) => {
+      console.log(res);
+      dispatch(changeTopArtistsListAction(res.artists));
+    });
+  }
+);
 interface IRecommendState {
   banners: any[];
   recommendList: any[];
   newAlbumList: any[];
   rankingLists: any[];
+  topArtistsList: any[];
 }
 const initialState: IRecommendState = {
   banners: [],
   recommendList: [],
   newAlbumList: [],
-  rankingLists: []
+  rankingLists: [],
+  topArtistsList: []
 };
 const recommendSlice = createSlice({
   name: "recommend",
@@ -76,6 +89,9 @@ const recommendSlice = createSlice({
     },
     changeRankingListsAction(state, { payload }) {
       state.rankingLists = payload;
+    },
+    changeTopArtistsListAction(state, { payload }) {
+      state.topArtistsList = payload;
     }
   }
   // extraReducers: (builder) => {
@@ -90,6 +106,7 @@ export const {
   changeBannersAction,
   changeRmdListAction,
   changeNewAlubmAction,
-  changeRankingListsAction
+  changeRankingListsAction,
+  changeTopArtistsListAction
 } = recommendSlice.actions;
 export default recommendSlice.reducer;
