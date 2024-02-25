@@ -19,3 +19,13 @@ export function getNeWAlbumList() {
     url: "/album/newest"
   });
 }
+
+// 获取歌单详情
+export function getPlaylistDetail(id: number) {
+  return axRequest.get({
+    url: "/playlist/detail",
+    params: {
+      id
+    }
+  });
+}

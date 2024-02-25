@@ -4,14 +4,16 @@ import type { ReactNode, FC } from "react";
 import { useAppDispath } from "@/store";
 import {
   fetchAlbumList,
+  fetchAllRankingDetail,
   fetchRecommendBanners,
   fetchRecommendList
 } from "@/store/module/recommend";
 
+import { RecommendWrapper } from "./style";
 import TopBanner from "./c-cpns/topBanner";
 import HotRecommend from "./c-cpns/hotRecommend";
-import { RecommendWrapper } from "./style";
 import NewAlbum from "./c-cpns/new-album";
+import Ranking from "./c-cpns/r-ranking";
 
 interface Iprops {
   children?: ReactNode;
@@ -23,6 +25,7 @@ const Recommend: FC<Iprops> = () => {
     dispath(fetchRecommendBanners());
     dispath(fetchRecommendList(8));
     dispath(fetchAlbumList());
+    dispath(fetchAllRankingDetail());
   });
   return (
     <RecommendWrapper className="recommend-page">
@@ -33,6 +36,7 @@ const Recommend: FC<Iprops> = () => {
         <div className="r-left">
           <HotRecommend />
           <NewAlbum />
+          <Ranking />
         </div>
         <div className="r-right">right</div>
       </div>
