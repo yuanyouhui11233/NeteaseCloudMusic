@@ -19,7 +19,7 @@ const Ranking: FC<Iprops> = () => {
       <AreaHeaderV1 title="榜单" pathLink="/discover/ranking" />
       <div className="ranking-content">
         {playLists.map((item) => {
-          return <RRankingItem itemData={item} key={item.id} />;
+          return <RRankingItem itemData={item} key={item?.id} />;
         })}
       </div>
     </RankingWrapper>

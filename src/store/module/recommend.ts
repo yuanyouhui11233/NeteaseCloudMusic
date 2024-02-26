@@ -55,7 +55,6 @@ export const fetchTopArtists = createAsyncThunk(
   "top/artists",
   (_, { dispatch }) => {
     getTopArtistsList(5).then((res: any) => {
-      console.log(res);
       dispatch(changeTopArtistsListAction(res.artists));
     });
   }

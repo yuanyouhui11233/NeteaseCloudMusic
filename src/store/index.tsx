@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import userSlice from "./module/user";
 import recommendSlice from "./module/recommend";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import playerSlice from "./module/player";
 const store = configureStore({
   reducer: {
     user: userSlice,
-    recommend: recommendSlice
+    recommend: recommendSlice,
+    player: playerSlice
   }
 });
 type RootState = ReturnType<typeof store.getState>;

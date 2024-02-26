@@ -12,7 +12,6 @@ interface Iprops {
 const RankingItem: FC<Iprops> = (props) => {
   const { itemData } = props;
   const rankList: any[] = itemData?.tracks.slice(0, 10);
-  console.log(rankList);
 
   // 跳转歌曲详情
   function getSongDetail(name: string) {

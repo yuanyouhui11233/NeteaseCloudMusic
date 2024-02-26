@@ -3,6 +3,7 @@ import AppHeader from "./components/app-header";
 import Footer from "./components/app-footer";
 import { useRoutes } from "react-router-dom";
 import routes from "./router";
+import AppPlayerBar from "./views/player/app-player-bar";
 
 const App = memo(() => {
   return (
@@ -17,6 +18,7 @@ const App = memo(() => {
       <div className="footer">
         <Footer />
       </div>
+      <AppPlayerBar />
     </div>
   );
 });
