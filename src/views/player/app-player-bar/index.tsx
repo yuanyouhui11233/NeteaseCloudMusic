@@ -8,9 +8,10 @@ import {
 } from "./style";
 import { Link } from "react-router-dom";
 import { Slider } from "antd";
-import { useAppSelector } from "@/store";
+import { useAppDispath, useAppSelector } from "@/store";
 import { formatImgSize, formatTime } from "@/utils/format";
 import { getSongUrl } from "@/utils/handle-player";
+import { fetchCurrentSong } from "@/store/module/player";
 
 interface Iprops {
   children?: ReactNode;
@@ -34,8 +35,8 @@ const AppPlayerBar: FC<Iprops> = () => {
   });
 
   useEffect(() => {
-    audioRef.current!.src = getSongUrl(currentSong.songs.id);
-    setDuration(currentSong?.songs.dt);
+    audioRef.current!.src = getSongUrl(currentSong?.songs?.id);
+    setDuration(currentSong?.songs?.dt);
   }, [currentSong]);
 
   // 播放/暂停
@@ -67,9 +68,12 @@ const AppPlayerBar: FC<Iprops> = () => {
     setIsDraging(true);
     setProgress(value);
 
-    //当前时长在拖拽中根据进度条的变化而变化
-    const currTime = (value / 100) * duration;
-    setCurrentTime(currTime);
+    // 播放器音乐列表为0时，只展示ui交互，不设置currentTime/duration
+    if (currentTime !== 0) {
+      //当前时长在拖拽中根据进度条的变化而变化
+      const currTime = (value / 100) * duration;
+      setCurrentTime(currTime);
+    }
   };
 
   // mouseup keyup 结束后的回调
@@ -79,8 +83,10 @@ const AppPlayerBar: FC<Iprops> = () => {
     const progressCurrentTime = (value / 100) * duration;
 
     // 根据拖拽结束后的长度 计算出 拖拽结束后的当前时间
-    audioRef.current!.currentTime = progressCurrentTime / 1000;
-    setCurrentTime(progressCurrentTime / 1000);
+    if (currentTime !== 0) {
+      audioRef.current!.currentTime = progressCurrentTime / 1000;
+      setCurrentTime(progressCurrentTime / 1000);
+    }
 
     setIsDraging(false);
   };
@@ -107,16 +113,18 @@ const AppPlayerBar: FC<Iprops> = () => {
             <div className="bg sprite_playbar">
               <img
                 className="image "
-                src={formatImgSize(currentSong.songs.al.picUrl, 34, 34)}
+                src={formatImgSize(currentSong?.songs?.al?.picUrl, 34, 34)}
                 alt=""
               />
             </div>
           </Link>
           <div className="info">
             <div className="song">
-              <div className="song-name text">{currentSong.songs.al.name}</div>
+              <div className="song-name text">
+                {currentSong?.songs?.al.name}
+              </div>
               <div className="singer-name text">
-                {currentSong.songs.ar[0].name}
+                {currentSong?.songs?.ar[0].name}
               </div>
             </div>
             <div className="progress">
@@ -128,8 +136,12 @@ const AppPlayerBar: FC<Iprops> = () => {
                 onChangeComplete={handleDragChanged}
               />
               <div className="time">
-                <div className="current">{formatTime(currentTime)}</div>
-                <div className="duration">/ {formatTime(duration)}</div>
+                <div className="current">
+                  {currentTime !== 0 ? formatTime(currentTime) : "00:00"}
+                </div>
+                <div className="duration">
+                  / {duration ? formatTime(duration) : "00:00"}
+                </div>
               </div>
             </div>
           </div>
