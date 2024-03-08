@@ -4,8 +4,7 @@ export const fetchCurrentSong = createAsyncThunk(
   "player/song",
   async (id: number | number[], { dispatch }) => {
     const res = await getCurrentPlaySong(id);
-    console.log(res.songs[0]);
-
+    console.log(res);
     dispatch(changeSongsAction(res.songs[0]));
   }
 );

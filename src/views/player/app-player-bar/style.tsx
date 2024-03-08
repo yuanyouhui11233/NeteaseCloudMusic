@@ -166,23 +166,60 @@ export const BarOperator = styled.div`
     }
   }
   .right {
-    .volume {
-      background-position: -2px -248px;
-      &:hover {
-        background-position: -31px -248px;
+    position: relative;
+    .volume_bar {
+      position: absolute;
+      top: -127px;
+      left: -8px;
+      width: 32px;
+      height: 113px;
+      .bar_bg {
+        width: 32px;
+        height: 113px;
+        background-position: 0 -503px;
+      }
+      .vbg {
+        position: absolute;
+        top: 10px;
+        left: 13px;
+        background-color: red;
+        width: 4px;
+        height: 93px;
+        .current {
+        }
+        .circle {
+          position: absolute;
+          left: -7px;
+          width: 18px;
+          height: 20px;
+          background-position: -40px -250px;
+          cursor: pointer;
+          &:hover {
+            background-position: -40px -280px;
+          }
+        }
       }
     }
-    .loop {
-      background-position: -3px -344px;
-      &:hover {
-        background-position: -33px -344px;
+    .ctrl {
+      display: flex;
+      .volume {
+        background-position: -2px -248px;
+        &:hover {
+          background-position: -31px -248px;
+        }
       }
-    }
-    .playlist {
-      width: 59px;
-      background-position: -44px -69px;
-      &:hover {
-        background-position: -44px -99px;
+      .loop {
+        background-position: -3px -344px;
+        &:hover {
+          background-position: -33px -344px;
+        }
+      }
+      .playlist {
+        width: 59px;
+        background-position: -44px -69px;
+        &:hover {
+          background-position: -44px -99px;
+        }
       }
     }
   }

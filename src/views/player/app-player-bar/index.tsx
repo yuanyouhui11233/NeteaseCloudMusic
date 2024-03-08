@@ -29,16 +29,28 @@ const AppPlayerBar: FC<Iprops> = () => {
   const [duration, setDuration] = useState(0);
   const [isDraging, setIsDraging] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [playList, setplayList] = useState(0);
+
+  const [volumeIsHidden, setVolumeIsHidden] = useState(true);
+  const [vBarLength, setVBarLength] = useState(80);
 
   const currentSong = useAppSelector((state) => {
     return state.player.currentSong;
   });
 
   useEffect(() => {
-    audioRef.current!.src = getSongUrl(currentSong?.songs?.id);
-    setDuration(currentSong?.songs?.dt);
+    audioRef.current!.src = getSongUrl(currentSong?.id);
+    setDuration(currentSong?.dt);
+    // setplayList(currentSong.length);
   }, [currentSong]);
 
+  // 监听currentTime和duration是否相近
+  useEffect(() => {
+    if (Math.abs(currentTime - duration) < 1000) {
+      console.log("结束");
+      audioRef.current!.src = "";
+    }
+  }, [currentTime, duration]);
   // 播放/暂停
   function handlePlay() {
     setIsPlaying(!isPlaying);
@@ -90,6 +102,18 @@ const AppPlayerBar: FC<Iprops> = () => {
 
     setIsDraging(false);
   };
+  const handleRouteJump = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    console.log(currentSong);
+  };
+  // 音量条显示/隐藏
+  const volumeBarIsHidden = () => {
+    setVolumeIsHidden(!volumeIsHidden);
+  };
+  // 处理音量条长度
+  const handleVBarLength = () => {
+    // setVBarLength()
+  };
   return (
     <AppPlayerBarWrapper className="sprite_playbar">
       <div className="content wrap-v2">
@@ -109,23 +133,19 @@ const AppPlayerBar: FC<Iprops> = () => {
           </button>
         </BarControl>
         <BarPlayerInfo>
-          <Link to="/player">
+          <Link to="/player" onClick={handleRouteJump}>
             <div className="bg sprite_playbar">
               <img
                 className="image "
-                src={formatImgSize(currentSong?.songs?.al?.picUrl, 34, 34)}
+                src={formatImgSize(currentSong?.al?.picUrl, 34, 34)}
                 alt=""
               />
             </div>
           </Link>
           <div className="info">
             <div className="song">
-              <div className="song-name text">
-                {currentSong?.songs?.al.name}
-              </div>
-              <div className="singer-name text">
-                {currentSong?.songs?.ar[0].name}
-              </div>
+              <div className="song-name text">{currentSong?.al.name}</div>
+              <div className="singer-name text">{currentSong?.ar[0].name}</div>
             </div>
             <div className="progress">
               <Slider
@@ -153,9 +173,30 @@ const AppPlayerBar: FC<Iprops> = () => {
             <button className="btn sprite_playbar share"></button>
           </div>
           <div className="right sprite_playbar">
-            <button className="btn sprite_playbar volume"></button>
-            <button className="btn sprite_playbar loop"></button>
-            <button className="btn sprite_playbar playlist"></button>
+            <div
+              className="volume_bar"
+              style={{ display: volumeIsHidden ? "none" : "block" }}
+            >
+              <div className="bar_bg sprite_playbar" />
+              <div className="vbg">
+                <div className="current"></div>
+                <div
+                  onClick={handleVBarLength}
+                  style={{ top: `${vBarLength}px` }}
+                  className="circle sprite_icon"
+                ></div>
+              </div>
+            </div>
+            <div className="ctrl">
+              <button
+                className="btn sprite_playbar volume"
+                onClick={volumeBarIsHidden}
+              ></button>
+              <button className="btn sprite_playbar loop"></button>
+              <button className="btn sprite_playbar playlist">
+                {playList}
+              </button>
+            </div>
           </div>
         </BarOperator>
       </div>
