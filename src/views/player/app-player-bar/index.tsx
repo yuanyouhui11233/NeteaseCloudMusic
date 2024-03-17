@@ -7,11 +7,15 @@ import {
   BarPlayerInfo
 } from "./style";
 import { Link } from "react-router-dom";
-import { Slider } from "antd";
+import { Slider, message } from "antd";
 import { useAppDispath, useAppSelector } from "@/store";
 import { formatImgSize, formatTime } from "@/utils/format";
 import { getSongUrl } from "@/utils/handle-player";
-import { fetchCurrentSong } from "@/store/module/player";
+import { shallowEqual } from "react-redux";
+import {
+  changeLyricIndexAction,
+  changePlayModeAction
+} from "@/store/module/player";
 
 interface Iprops {
   children?: ReactNode;
@@ -29,15 +33,30 @@ const AppPlayerBar: FC<Iprops> = () => {
   const [duration, setDuration] = useState(0);
   const [isDraging, setIsDraging] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [playList, setplayList] = useState(0);
 
   const [volumeIsHidden, setVolumeIsHidden] = useState(true);
   const [vBarLength, setVBarLength] = useState(80);
 
-  const currentSong = useAppSelector((state) => {
-    return state.player.currentSong;
-  });
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const dispath = useAppDispath();
+
+  const {
+    currentSong,
+    lyricSong: lyrics,
+    lyricIndex,
+    playList,
+    playMode
+  } = useAppSelector(
+    (state) => ({
+      currentSong: state.player.currentSong,
+      lyricSong: state.player.lyricSong,
+      lyricIndex: state.player.lyricIndex,
+      playList: state.player.playList,
+      playMode: state.player.playMode
+    }),
+    shallowEqual
+  );
   useEffect(() => {
     audioRef.current!.src = getSongUrl(currentSong?.id);
     setDuration(currentSong?.dt);
@@ -72,6 +91,22 @@ const AppPlayerBar: FC<Iprops> = () => {
       setProgress(progress);
       setCurrentTime(currentTime);
     }
+
+    // 根据进度条当前时间进行匹配歌词
+    let index = lyrics.length - 1;
+    for (let i = 0; i < lyrics.length; i++) {
+      const lyric = lyrics[i];
+      if (lyric.time > currentTime) {
+        index = i - 1;
+        break;
+      }
+    }
+
+    // 匹配歌词的索引可能其他组件也要使用，存到redux中 (频繁调用dispath - 待优化)
+    if (lyricIndex === index) return; // 慢一个index
+    dispath(changeLyricIndexAction(index));
+    messageApi.info(lyrics[lyricIndex + 1].text);
+    console.log(lyrics[lyricIndex + 1]);
   }
 
   // 进度条拖拽时change事件
@@ -114,11 +149,25 @@ const AppPlayerBar: FC<Iprops> = () => {
   const handleVBarLength = () => {
     // setVBarLength()
   };
+  // 上一首
+  const handlePrevSong = () => {
+    console.log("prev");
+  };
+  // 切换播放模式
+  const checkPlayMode = () => {
+    let index = playMode + 1;
+    if (index >= 3) index = 0;
+    dispath(changePlayModeAction(index));
+  };
   return (
     <AppPlayerBarWrapper className="sprite_playbar">
       <div className="content wrap-v2">
         <BarControl $isPlaying={isPlaying}>
-          <button className="sprite_playbar btn prev" title="上一首">
+          <button
+            className="sprite_playbar btn prev"
+            title="上一首"
+            onClick={handlePrevSong}
+          >
             上一首
           </button>
           <button
@@ -166,7 +215,8 @@ const AppPlayerBar: FC<Iprops> = () => {
             </div>
           </div>
         </BarPlayerInfo>
-        <BarOperator>
+        {contextHolder}
+        <BarOperator $playMode={playMode}>
           <div className="left">
             <button className="btn pip_icon"></button>
             <button className="btn sprite_playbar favor"></button>
@@ -192,9 +242,12 @@ const AppPlayerBar: FC<Iprops> = () => {
                 className="btn sprite_playbar volume"
                 onClick={volumeBarIsHidden}
               ></button>
-              <button className="btn sprite_playbar loop"></button>
+              <button
+                className="btn sprite_playbar loop"
+                onClick={checkPlayMode}
+              ></button>
               <button className="btn sprite_playbar playlist">
-                {playList}
+                {playList.length}
               </button>
             </div>
           </div>

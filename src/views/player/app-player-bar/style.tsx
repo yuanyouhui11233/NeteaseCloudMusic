@@ -134,7 +134,10 @@ export const BarPlayerInfo = styled.div`
     }
   }
 `;
-export const BarOperator = styled.div`
+interface IBarOperator {
+  $playMode: 0 | 1 | 2;
+}
+export const BarOperator = styled.div<IBarOperator>`
   display: flex;
   align-items: center;
   .btn {
@@ -209,13 +212,25 @@ export const BarOperator = styled.div`
         }
       }
       .loop {
-        background-position: -3px -344px;
         &:hover {
-          background-position: -33px -344px;
+          /* background-position: -33px -344px; */
         }
+        background-position: ${(props) => {
+          switch (props.$playMode) {
+            case 0:
+              return "-3px -344px;";
+            case 1:
+              return "-66px -248px;"; // "-92px -248px;"
+            case 2:
+              return "-66px -344px;";
+          }
+        }};
       }
+
       .playlist {
         width: 59px;
+        color: #666;
+        padding-left: 14px;
         background-position: -44px -69px;
         &:hover {
           background-position: -44px -99px;

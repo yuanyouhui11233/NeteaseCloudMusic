@@ -5,12 +5,13 @@ import { useRoutes } from "react-router-dom";
 import routes from "./router";
 import AppPlayerBar from "./views/player/app-player-bar";
 import { useAppDispath } from "./store";
-import { fetchCurrentSong } from "./store/module/player";
+import { fetchCurrentSong, fetchSongLyric } from "./store/module/player";
 
 const App = memo(() => {
   const dispath = useAppDispath();
   useEffect(() => {
     dispath(fetchCurrentSong(191248));
+    dispath(fetchSongLyric(191248));
   }, []);
   return (
     <div className="app">

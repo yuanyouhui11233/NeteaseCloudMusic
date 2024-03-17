@@ -10,9 +10,9 @@ const store = configureStore({
     player: playerSlice
   }
 });
-type RootState = ReturnType<typeof store.getState>;
+export type IRootState = ReturnType<typeof store.getState>;
 type AppDispath = typeof store.dispatch;
 // useSelector useDispath Hook
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;
 export const useAppDispath: () => AppDispath = useDispatch;
 export default store;
