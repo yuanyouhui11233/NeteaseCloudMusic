@@ -2,45 +2,9 @@ import { getCurrentPlaySong, getSongLyric } from "@/service/player";
 import { parseLyric } from "@/utils/parse-lyric";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IRootState } from "..";
-//  通过id请求当前播放歌曲
-// 请求当前播放歌曲的两种逻辑
-// 1. 播放的歌曲没有在维护的播放列表中
-// 2. 播放的歌曲在维护的播放列表中
-export const fetchCurrentSong = createAsyncThunk<
-  void,
-  number,
-  { state: IRootState }
->("player/song", async (id, { dispatch, getState }) => {
-  const playList = getState().player.playList;
-  const findIndex = playList.findIndex((item) => item.id === id);
-  console.log(playList[findIndex]);
-  if (findIndex === -1) {
-    // 播放列表没有这首歌
-    const res = await getCurrentPlaySong(id);
-    if (!res.songs.length) return;
-    const updatedPlayList = [...playList];
-    updatedPlayList.push(res.songs[0]);
-    dispatch(changeCurrentSongsAction(res.songs[0]));
-    dispatch(changePlayListAction(updatedPlayList));
-    dispatch(changeCurrentIndexAction(updatedPlayList.length - 1));
-  } else {
-    dispatch(changeCurrentIndexAction(findIndex));
-    dispatch(changeCurrentSongsAction(playList[findIndex]));
-  }
-});
-// 通过id拿到歌词
-export const fetchSongLyric = createAsyncThunk(
-  "player/lyric",
-  (id: number, { dispatch }) => {
-    getSongLyric(id).then((res) => {
-      const lyric = res.lrc.lyric;
-      const parseLrc = parseLyric(lyric);
-      console.log(parseLrc);
-
-      dispatch(changeSongLyricAction(parseLrc));
-    });
-  }
-);
+interface IThunkState {
+  state: IRootState;
+}
 type IlyricSong = {
   text: string;
   time: number;
@@ -55,6 +19,78 @@ interface Istate {
 
   playMode: 0 | 1 | 2;
 }
+//  通过id请求当前播放歌曲
+// 请求当前播放歌曲的两种逻辑
+// 1. 播放的歌曲没有在维护的播放列表中
+// 2. 播放的歌曲在维护的播放列表中
+export const fetchCurrentSong = createAsyncThunk<void, number, IThunkState>(
+  "player/song",
+  async (id, { dispatch, getState }) => {
+    const playList = getState().player.playList;
+    const findIndex = playList.findIndex((item) => item.id === id);
+    console.log(playList[findIndex]);
+    if (findIndex === -1) {
+      // 播放列表没有这首歌
+      const res = await getCurrentPlaySong(id);
+      if (!res.songs.length) return;
+      const updatedPlayList = [...playList];
+      updatedPlayList.push(res.songs[0]);
+      dispatch(changeCurrentSongsAction(res.songs[0]));
+      dispatch(changePlayListAction(updatedPlayList));
+      dispatch(changeCurrentIndexAction(updatedPlayList.length - 1));
+    } else {
+      dispatch(changeCurrentIndexAction(findIndex));
+      dispatch(changeCurrentSongsAction(playList[findIndex]));
+    }
+  }
+);
+// 通过id拿到歌词
+export const fetchSongLyric = createAsyncThunk(
+  "player/lyric",
+  (id: number, { dispatch }) => {
+    getSongLyric(id).then((res) => {
+      if (res.code !== 200) return;
+      const lyric = res.lrc.lyric;
+      const parseLrc = parseLyric(lyric);
+      console.log(parseLrc);
+
+      dispatch(changeSongLyricAction(parseLrc));
+    });
+  }
+);
+/**
+ * 通过playList的上一个/下一个的索引来设置currentSong 和 currentIndex
+ * 只需要根据 播放模式和 上一首/下一首 来重新赋值 newIndex
+ * 最后通过 newIndex 从 playList取歌曲 存到store即可
+ * 组件页只需从store取currentSong
+ */
+export const fetchChangeMusic = createAsyncThunk<void, boolean, IThunkState>(
+  "player/changeMusic",
+  (isNext, { dispatch, getState }) => {
+    const player = getState().player;
+    const playList = player.playList;
+    const playMode = player.playMode;
+    const currentIndex = player.currentIndex;
+    let newIndex = currentIndex;
+    if (playMode === 0) {
+      newIndex = isNext ? currentIndex + 1 : newIndex - 1;
+      if (newIndex >= playList.length - 1) newIndex = 0;
+      if (newIndex < 0) newIndex = playList.length - 1;
+    } else if (playMode === 1) {
+      const random = Math.floor(Math.random() * (playList.length - 1)); // 随机数未做相等时，重新随机
+      newIndex = random;
+    } else {
+      console.log("单曲");
+    }
+
+    dispatch(changeCurrentIndexAction(newIndex));
+    dispatch(changeCurrentSongsAction(playList[newIndex]));
+    localStorage.setItem("currentIndex", newIndex.toString());
+    // 请求新的歌词
+    dispatch(fetchSongLyric(playList[newIndex].id));
+  }
+);
+
 const initialState: Istate = {
   currentSong: null,
   lyricSong: [],

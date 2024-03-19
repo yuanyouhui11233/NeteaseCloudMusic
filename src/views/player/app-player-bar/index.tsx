@@ -14,7 +14,8 @@ import { getSongUrl } from "@/utils/handle-player";
 import { shallowEqual } from "react-redux";
 import {
   changeLyricIndexAction,
-  changePlayModeAction
+  changePlayModeAction,
+  fetchChangeMusic
 } from "@/store/module/player";
 
 interface Iprops {
@@ -60,7 +61,6 @@ const AppPlayerBar: FC<Iprops> = () => {
   useEffect(() => {
     audioRef.current!.src = getSongUrl(currentSong?.id);
     setDuration(currentSong?.dt);
-    // setplayList(currentSong.length);
   }, [currentSong]);
 
   // 监听currentTime和duration是否相近
@@ -150,8 +150,13 @@ const AppPlayerBar: FC<Iprops> = () => {
     // setVBarLength()
   };
   // 上一首
-  const handlePrevSong = () => {
-    console.log("prev");
+  const handleChangeMusic = (isNext: boolean) => {
+    dispath(fetchChangeMusic(isNext));
+    if (isPlaying) {
+      console.log("true", audioRef);
+      audioRef.current?.play();
+    }
+    setIsPlaying(false);
   };
   // 切换播放模式
   const checkPlayMode = () => {
@@ -166,7 +171,7 @@ const AppPlayerBar: FC<Iprops> = () => {
           <button
             className="sprite_playbar btn prev"
             title="上一首"
-            onClick={handlePrevSong}
+            onClick={() => handleChangeMusic(false)}
           >
             上一首
           </button>
@@ -177,7 +182,11 @@ const AppPlayerBar: FC<Iprops> = () => {
           >
             播放/暂停
           </button>
-          <button className="sprite_playbar btn next" title="下一首">
+          <button
+            className="sprite_playbar btn next"
+            title="下一首"
+            onClick={() => handleChangeMusic(true)}
+          >
             下一首
           </button>
         </BarControl>
