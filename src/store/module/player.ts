@@ -28,7 +28,6 @@ export const fetchCurrentSong = createAsyncThunk<void, number, IThunkState>(
   async (id, { dispatch, getState }) => {
     const playList = getState().player.playList;
     const findIndex = playList.findIndex((item) => item.id === id);
-    console.log(playList[findIndex]);
     if (findIndex === -1) {
       // 播放列表没有这首歌
       const res = await getCurrentPlaySong(id);
@@ -70,6 +69,7 @@ export const fetchChangeMusic = createAsyncThunk<void, boolean, IThunkState>(
     const player = getState().player;
     const playList = player.playList;
     const playMode = player.playMode;
+    console.log(playList);
     const currentIndex = player.currentIndex;
     let newIndex = currentIndex;
     if (playMode === 0) {

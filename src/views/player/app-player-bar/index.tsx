@@ -7,7 +7,7 @@ import {
   BarPlayerInfo
 } from "./style";
 import { Link } from "react-router-dom";
-import { Slider, message } from "antd";
+import { Slider } from "antd";
 import { useAppDispath, useAppSelector } from "@/store";
 import { formatImgSize, formatTime } from "@/utils/format";
 import { getSongUrl } from "@/utils/handle-player";
@@ -38,8 +38,6 @@ const AppPlayerBar: FC<Iprops> = () => {
   const [volumeIsHidden, setVolumeIsHidden] = useState(true);
   const [vBarLength, setVBarLength] = useState(80);
 
-  const [messageApi, contextHolder] = message.useMessage();
-
   const dispath = useAppDispath();
 
   const {
@@ -67,7 +65,8 @@ const AppPlayerBar: FC<Iprops> = () => {
   useEffect(() => {
     if (Math.abs(currentTime - duration) < 1000) {
       console.log("结束");
-      audioRef.current!.src = "";
+
+      // audioRef.current!.src = "";
     }
   }, [currentTime, duration]);
   // 播放/暂停
@@ -105,7 +104,6 @@ const AppPlayerBar: FC<Iprops> = () => {
     // 匹配歌词的索引可能其他组件也要使用，存到redux中 (频繁调用dispath - 待优化)
     if (lyricIndex === index) return; // 慢一个index
     dispath(changeLyricIndexAction(index));
-    messageApi.info(lyrics[lyricIndex + 1].text);
     console.log(lyrics[lyricIndex + 1]);
   }
 
@@ -149,7 +147,7 @@ const AppPlayerBar: FC<Iprops> = () => {
   const handleVBarLength = () => {
     // setVBarLength()
   };
-  // 上一首
+  // 切换歌曲
   const handleChangeMusic = (isNext: boolean) => {
     dispath(fetchChangeMusic(isNext));
     if (isPlaying) {
@@ -163,6 +161,12 @@ const AppPlayerBar: FC<Iprops> = () => {
     let index = playMode + 1;
     if (index >= 3) index = 0;
     dispath(changePlayModeAction(index));
+  };
+  const handleTimeEnded = () => {
+    console.log("end");
+    if (playMode === 2) {
+      audioRef.current?.play();
+    }
   };
   return (
     <AppPlayerBarWrapper className="sprite_playbar">
@@ -224,7 +228,6 @@ const AppPlayerBar: FC<Iprops> = () => {
             </div>
           </div>
         </BarPlayerInfo>
-        {contextHolder}
         <BarOperator $playMode={playMode}>
           <div className="left">
             <button className="btn pip_icon"></button>
@@ -262,7 +265,11 @@ const AppPlayerBar: FC<Iprops> = () => {
           </div>
         </BarOperator>
       </div>
-      <audio src="" ref={audioRef} onTimeUpdate={() => timeUpdate()}></audio>
+      <audio
+        ref={audioRef}
+        onTimeUpdate={() => timeUpdate()}
+        onEnded={handleTimeEnded}
+      ></audio>
     </AppPlayerBarWrapper>
   );
 };
