@@ -2,6 +2,7 @@ import { getCurrentPlaySong, getSongLyric } from "@/service/player";
 import { parseLyric } from "@/utils/parse-lyric";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IRootState } from "..";
+import LocalStorageService from "@/utils/localStorage";
 interface IThunkState {
   state: IRootState;
 }
@@ -17,8 +18,9 @@ interface Istate {
   playList: any[]; // 维护的播放列表
   currentIndex: any; // 播放列表中当前播放歌曲的索引
 
-  playMode: 0 | 1 | 2;
+  playMode: PM;
 }
+type PM = 0 | 1 | 2;
 //  通过id请求当前播放歌曲
 // 请求当前播放歌曲的两种逻辑
 // 1. 播放的歌曲没有在维护的播放列表中
@@ -480,7 +482,7 @@ const initialState: Istate = {
     }
   ],
   currentIndex: null,
-  playMode: 0 // 0:顺序播放 1：随机播放 2：单曲循环
+  playMode: LocalStorageService.getItem<PM>("playMode") || 0 // 0:顺序播放 1：随机播放 2：单曲循环
 };
 const playerSlice = createSlice({
   name: "playerSlice",
@@ -502,6 +504,7 @@ const playerSlice = createSlice({
       state.currentIndex = payload;
     },
     changePlayModeAction(state, { payload }) {
+      LocalStorageService.setItem("playMode", payload);
       state.playMode = payload;
     }
   }

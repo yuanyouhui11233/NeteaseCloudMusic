@@ -165,6 +165,7 @@ const AppPlayerBar: FC<Iprops> = () => {
   const handleTimeEnded = () => {
     console.log("end");
     if (playMode === 2) {
+      audioRef.current!.currentTime = 0;
       audioRef.current?.play();
     }
   };
