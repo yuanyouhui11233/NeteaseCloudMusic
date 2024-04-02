@@ -37,7 +37,7 @@ const AppPlayerBar: FC<Iprops> = () => {
 
   const [volumeIsHidden, setVolumeIsHidden] = useState(true);
   const [vBarLength, setVBarLength] = useState(80);
-
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
   const dispath = useAppDispath();
 
   const {
@@ -74,6 +74,7 @@ const AppPlayerBar: FC<Iprops> = () => {
     setIsPlaying(!isPlaying);
     // 歌曲总时长
     if (isPlaying) {
+      setIsAutoPlay(true);
       audioRef.current?.pause();
     } else {
       audioRef.current?.play().catch(() => setIsPlaying(false));
@@ -153,8 +154,8 @@ const AppPlayerBar: FC<Iprops> = () => {
     if (isPlaying) {
       console.log("true", audioRef);
       audioRef.current?.play();
+      setIsPlaying(true);
     }
-    setIsPlaying(false);
   };
   // 切换播放模式
   const checkPlayMode = () => {
@@ -166,7 +167,21 @@ const AppPlayerBar: FC<Iprops> = () => {
     console.log("end");
     if (playMode === 2) {
       audioRef.current!.currentTime = 0;
-      audioRef.current?.play();
+    } else {
+      dispath(fetchChangeMusic(true));
+    }
+    const playPromise = audioRef.current?.play();
+    // https://goo.gl/LdLk22
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          // Playback started successfully
+          // You can now make new load requests or perform other actions
+        })
+        .catch((error) => {
+          // Handle the error, e.g., show a paused UI or perform error handling
+          console.error(error);
+        });
     }
   };
   return (
@@ -270,6 +285,7 @@ const AppPlayerBar: FC<Iprops> = () => {
         ref={audioRef}
         onTimeUpdate={() => timeUpdate()}
         onEnded={handleTimeEnded}
+        autoPlay={isAutoPlay}
       ></audio>
     </AppPlayerBarWrapper>
   );
