@@ -172,10 +172,15 @@ export const BarOperator = styled.div<IBarOperator>`
     position: relative;
     .volume_bar {
       position: absolute;
-      top: -127px;
+      top: -126px;
       left: -8px;
       width: 32px;
       height: 113px;
+      .volume_slider {
+        position: absolute;
+        top: 5px;
+        height: 90px;
+      }
       .bar_bg {
         width: 32px;
         height: 113px;
@@ -188,8 +193,6 @@ export const BarOperator = styled.div<IBarOperator>`
         background-color: red;
         width: 4px;
         height: 93px;
-        .current {
-        }
         .circle {
           position: absolute;
           left: -7px;

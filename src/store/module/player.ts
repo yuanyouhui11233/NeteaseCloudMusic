@@ -33,6 +33,7 @@ export const fetchCurrentSong = createAsyncThunk<void, number, IThunkState>(
     if (findIndex === -1) {
       // 播放列表没有这首歌
       const res = await getCurrentPlaySong(id);
+      console.log(res);
       if (!res.songs.length) return;
       const updatedPlayList = [...playList];
       updatedPlayList.push(res.songs[0]);

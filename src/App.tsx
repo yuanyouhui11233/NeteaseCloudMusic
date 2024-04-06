@@ -18,7 +18,7 @@ const App = memo(() => {
   console.log(currentSong);
   useEffect(() => {
     const songId = currentSong?.id;
-    dispath(fetchCurrentSong(2026812798));
+    dispath(fetchCurrentSong(1974443815));
     dispath(fetchSongLyric(songId));
   }, []);
   return (

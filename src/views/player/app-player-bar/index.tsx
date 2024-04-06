@@ -36,7 +36,7 @@ const AppPlayerBar: FC<Iprops> = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   const [volumeIsHidden, setVolumeIsHidden] = useState(true);
-  const [vBarLength, setVBarLength] = useState(80);
+  const [volume, setVolume] = useState(100);
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const dispath = useAppDispath();
 
@@ -73,8 +73,8 @@ const AppPlayerBar: FC<Iprops> = () => {
   function handlePlay() {
     setIsPlaying(!isPlaying);
     // 歌曲总时长
+    setIsAutoPlay(true);
     if (isPlaying) {
-      setIsAutoPlay(true);
       audioRef.current?.pause();
     } else {
       audioRef.current?.play().catch(() => setIsPlaying(false));
@@ -144,10 +144,14 @@ const AppPlayerBar: FC<Iprops> = () => {
   const volumeBarIsHidden = () => {
     setVolumeIsHidden(!volumeIsHidden);
   };
-  // 处理音量条长度
-  const handleVBarLength = () => {
-    // setVBarLength()
+  const handleVolume = (value: number) => {
+    if (audioRef.current?.volume) {
+      audioRef.current.volume = value / 100;
+      console.log(audioRef.current.volume);
+    }
+    setVolume(value);
   };
+
   // 切换歌曲
   const handleChangeMusic = (isNext: boolean) => {
     dispath(fetchChangeMusic(isNext));
@@ -222,7 +226,7 @@ const AppPlayerBar: FC<Iprops> = () => {
           </Link>
           <div className="info">
             <div className="song">
-              <div className="song-name text">{currentSong?.al.name}</div>
+              <div className="song-name text">{currentSong?.name}</div>
               <div className="singer-name text">{currentSong?.ar[0].name}</div>
             </div>
             <div className="progress">
@@ -250,21 +254,22 @@ const AppPlayerBar: FC<Iprops> = () => {
             <button className="btn sprite_playbar favor"></button>
             <button className="btn sprite_playbar share"></button>
           </div>
+
           <div className="right sprite_playbar">
+            {/* 音量 */}
             <div
               className="volume_bar"
               style={{ display: volumeIsHidden ? "none" : "block" }}
             >
               <div className="bar_bg sprite_playbar" />
-              <div className="vbg">
-                <div className="current"></div>
-                <div
-                  onClick={handleVBarLength}
-                  style={{ top: `${vBarLength}px` }}
-                  className="circle sprite_icon"
-                ></div>
-              </div>
+              <Slider
+                value={volume}
+                vertical
+                onChange={handleVolume}
+                className="volume_slider"
+              />
             </div>
+
             <div className="ctrl">
               <button
                 className="btn sprite_playbar volume"
