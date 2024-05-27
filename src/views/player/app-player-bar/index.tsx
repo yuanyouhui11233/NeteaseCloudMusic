@@ -145,10 +145,8 @@ const AppPlayerBar: FC<Iprops> = () => {
     setVolumeIsHidden(!volumeIsHidden);
   };
   const handleVolume = (value: number) => {
-    if (audioRef.current?.volume) {
-      audioRef.current.volume = value / 100;
-      console.log(audioRef.current.volume);
-    }
+    audioRef.current!.volume = value / 100;
+    console.log(audioRef.current?.volume);
     setVolume(value);
   };
 
